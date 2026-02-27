@@ -3,7 +3,7 @@ import axios from "axios";
 import { io } from "socket.io-client";
 import "./App.css";
 
-const socket = io("http://localhost:5000");
+const socket = io("https://innoverse-26-1.onrender.com");
 
 // Generate particle config once
 const PARTICLES = Array.from({ length: 30 }, (_, i) => ({
@@ -38,7 +38,7 @@ function ResetPage() {
 
   const handleReset = async () => {
     try {
-      await axios.post("http://localhost:5000/reset");
+      await axios.post("https://innoverse-26-1.onrender.com/reset");
       setStatus("success");
       setTimeout(() => {
         window.location.href = "/";
@@ -198,7 +198,7 @@ function TimerPage() {
 
   const fetchTimer = useCallback(async () => {
     try {
-      const res = await axios.get("http://localhost:5000/timer");
+      const res = await axios.get("https://innoverse-26-1.onrender.com/timer");
       if (res.data.running) {
         setStarted(true);
         setTimeUp(false);
@@ -244,7 +244,7 @@ function TimerPage() {
 
   const handleStartClick = async () => {
     try {
-      await axios.post("http://localhost:5000/start");
+      await axios.post("https://innoverse-26-1.onrender.com/start");
     } catch (err) {
       console.error("Failed to start timer:", err);
     }
