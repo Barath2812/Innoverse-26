@@ -1,0 +1,616 @@
+/* ========================================
+   INNOVERSE LAUNCH — Black & Neon Green
+   ======================================== */
+
+/* ---------- Animated Background ---------- */
+.app-container {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: radial-gradient(ellipse at 20% 50%, #061a0a 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 20%, #0a1f0a 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 80%, #051205 0%, transparent 50%),
+    #000000;
+}
+
+.app-container::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: conic-gradient(from 0deg at 50% 50%,
+      transparent 0deg,
+      rgba(0, 255, 102, 0.03) 60deg,
+      transparent 120deg,
+      rgba(0, 255, 102, 0.02) 200deg,
+      transparent 280deg,
+      rgba(0, 200, 80, 0.02) 340deg,
+      transparent 360deg);
+  animation: rotateBg 30s linear infinite;
+  z-index: 0;
+}
+
+@keyframes rotateBg {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ---------- Floating Particles ---------- */
+.particles-container {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.particle {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(0, 255, 102, 0.5);
+  animation: floatUp linear infinite;
+  filter: blur(1px);
+}
+
+.particle:nth-child(odd) {
+  background: rgba(0, 230, 80, 0.4);
+}
+
+.particle:nth-child(3n) {
+  background: rgba(0, 200, 60, 0.35);
+}
+
+@keyframes floatUp {
+  0% {
+    transform: translateY(100vh) scale(0);
+    opacity: 0;
+  }
+
+  10% {
+    opacity: 1;
+  }
+
+  90% {
+    opacity: 0.6;
+  }
+
+  100% {
+    transform: translateY(-10vh) scale(1);
+    opacity: 0;
+  }
+}
+
+/* ---------- Matrix Binary Rain ---------- */
+.matrix-rain {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.matrix-column {
+  position: absolute;
+  top: -100%;
+  font-family: 'Orbitron', monospace;
+  color: #00ff66;
+  white-space: pre;
+  line-height: 1.6;
+  animation: matrixFall linear infinite;
+  text-shadow: 0 0 8px rgba(0, 255, 102, 0.4);
+}
+
+@keyframes matrixFall {
+  0% {
+    transform: translateY(-100%);
+  }
+
+  100% {
+    transform: translateY(200vh);
+  }
+}
+
+/* ---------- Grid Overlay ---------- */
+.grid-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-image:
+    linear-gradient(rgba(0, 255, 102, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 255, 102, 0.04) 1px, transparent 1px);
+  background-size: 60px 60px;
+  mask-image: radial-gradient(ellipse at center, black 30%, transparent 70%);
+  -webkit-mask-image: radial-gradient(ellipse at center, black 30%, transparent 70%);
+}
+
+/* ---------- Content Wrapper ---------- */
+.content-wrapper {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2.5rem;
+  padding: 2rem;
+}
+
+/* ---------- Event Header ---------- */
+.event-header {
+  text-align: center;
+  animation: fadeInDown 1s ease-out;
+}
+
+.event-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: clamp(2.5rem, 7vw, 5rem);
+  font-weight: 900;
+  letter-spacing: 6px;
+  color: #00ff66;
+  text-shadow:
+    0 0 10px rgba(0, 255, 102, 0.6),
+    0 0 30px rgba(0, 255, 102, 0.3),
+    0 0 60px rgba(0, 255, 102, 0.15);
+  line-height: 1.1;
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ---------- Timer Card (Glassmorphism) ---------- */
+.timer-card {
+  background: rgba(0, 255, 102, 0.03);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(0, 255, 102, 0.12);
+  border-radius: 24px;
+  padding: 3rem 4rem;
+  position: relative;
+  overflow: hidden;
+  animation: fadeInUp 1s ease-out 0.3s both;
+}
+
+.timer-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(0, 255, 102, 0.5), transparent);
+}
+
+.timer-card::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(0, 255, 102, 0.25), transparent);
+}
+
+.timer-label {
+  text-align: center;
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: rgba(0, 255, 102, 0.4);
+  margin-bottom: 1.5rem;
+}
+
+/* ---------- Timer Display ---------- */
+.timer-display {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.time-segment {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.time-digits {
+  font-family: 'Orbitron', sans-serif;
+  font-size: clamp(3.5rem, 10vw, 7rem);
+  font-weight: 800;
+  color: #00ff66;
+  text-shadow:
+    0 0 20px rgba(0, 255, 102, 0.6),
+    0 0 40px rgba(0, 255, 102, 0.3),
+    0 0 80px rgba(0, 255, 102, 0.15);
+  line-height: 1;
+  min-width: 2ch;
+  text-align: center;
+}
+
+.time-unit {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: rgba(0, 255, 102, 0.45);
+}
+
+.time-colon {
+  font-family: 'Orbitron', sans-serif;
+  font-size: clamp(3rem, 8vw, 5.5rem);
+  font-weight: 300;
+  color: rgba(0, 255, 102, 0.4);
+  animation: pulseDots 1.5s ease-in-out infinite;
+  padding: 0 0.3rem;
+  align-self: flex-start;
+  margin-top: 0.15em;
+}
+
+@keyframes pulseDots {
+
+  0%,
+  100% {
+    opacity: 0.3;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ---------- Start Button ---------- */
+.start-button {
+  position: relative;
+  font-family: 'Orbitron', sans-serif;
+  font-size: clamp(1rem, 2.5vw, 1.4rem);
+  font-weight: 700;
+  letter-spacing: 4px;
+  padding: 1.2rem 3.5rem;
+  border: 2px solid #00ff66;
+  border-radius: 16px;
+  color: #00ff66;
+  cursor: pointer;
+  background: rgba(0, 255, 102, 0.05);
+  box-shadow:
+    0 0 20px rgba(0, 255, 102, 0.25),
+    0 0 50px rgba(0, 255, 102, 0.1),
+    inset 0 0 20px rgba(0, 255, 102, 0.05);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+  animation: fadeInUp 1s ease-out 0.6s both;
+}
+
+.start-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg,
+      transparent,
+      rgba(0, 255, 102, 0.15),
+      transparent);
+  transition: left 0.6s ease;
+}
+
+.start-button:hover {
+  background: rgba(0, 255, 102, 0.12);
+  transform: translateY(-3px) scale(1.03);
+  box-shadow:
+    0 0 30px rgba(0, 255, 102, 0.4),
+    0 0 70px rgba(0, 255, 102, 0.15),
+    0 10px 40px rgba(0, 0, 0, 0.4),
+    inset 0 0 30px rgba(0, 255, 102, 0.08);
+}
+
+.start-button:hover::before {
+  left: 100%;
+}
+
+.start-button:active {
+  transform: translateY(0) scale(0.98);
+  box-shadow:
+    0 0 15px rgba(0, 255, 102, 0.3),
+    0 0 40px rgba(0, 255, 102, 0.1);
+}
+
+/* ---------- TIME UP State ---------- */
+.time-up {
+  font-family: 'Orbitron', sans-serif;
+  font-size: clamp(3rem, 8vw, 5.5rem);
+  font-weight: 900;
+  letter-spacing: 8px;
+  color: #ff3b5c;
+  text-shadow:
+    0 0 20px rgba(255, 59, 92, 0.6),
+    0 0 40px rgba(255, 59, 92, 0.3),
+    0 0 80px rgba(255, 59, 92, 0.15);
+  animation: pulseRed 1.5s ease-in-out infinite;
+  text-align: center;
+}
+
+@keyframes pulseRed {
+
+  0%,
+  100% {
+    text-shadow:
+      0 0 20px rgba(255, 59, 92, 0.6),
+      0 0 40px rgba(255, 59, 92, 0.3),
+      0 0 80px rgba(255, 59, 92, 0.15);
+  }
+
+  50% {
+    text-shadow:
+      0 0 30px rgba(255, 59, 92, 0.8),
+      0 0 60px rgba(255, 59, 92, 0.5),
+      0 0 120px rgba(255, 59, 92, 0.25);
+  }
+}
+
+/* ---------- Footer ---------- */
+.event-footer {
+  text-align: center;
+  animation: fadeInUp 1s ease-out 0.9s both;
+}
+
+.footer-line {
+  width: 60px;
+  height: 2px;
+  background: #00ff66;
+  border: none;
+  border-radius: 2px;
+  margin: 0 auto 1rem;
+  opacity: 0.4;
+  box-shadow: 0 0 10px rgba(0, 255, 102, 0.3);
+}
+
+.footer-text {
+  font-size: 0.8rem;
+  color: rgba(0, 255, 102, 0.25);
+  letter-spacing: 1.5px;
+}
+
+/* ---------- Pre-Launch Countdown (5-4-3-2-1) ---------- */
+.pre-countdown {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+}
+
+.pre-countdown-number {
+  font-family: 'Orbitron', sans-serif;
+  font-size: clamp(6rem, 20vw, 12rem);
+  font-weight: 900;
+  color: #00ff66;
+  text-shadow:
+    0 0 30px rgba(0, 255, 102, 0.7),
+    0 0 60px rgba(0, 255, 102, 0.4),
+    0 0 120px rgba(0, 255, 102, 0.2);
+  animation: countPop 0.9s ease-out;
+  line-height: 1;
+}
+
+@keyframes countPop {
+  0% {
+    opacity: 0;
+    transform: scale(2.5);
+    text-shadow:
+      0 0 60px rgba(0, 255, 102, 0.9),
+      0 0 120px rgba(0, 255, 102, 0.5);
+  }
+
+  30% {
+    opacity: 1;
+    transform: scale(0.95);
+  }
+
+  50% {
+    transform: scale(1.05);
+  }
+
+  70% {
+    transform: scale(1);
+  }
+
+  100% {
+    opacity: 0.2;
+    transform: scale(0.9);
+  }
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 640px) {
+  .timer-card {
+    padding: 2rem 1.5rem;
+    border-radius: 18px;
+  }
+
+  .timer-display {
+    gap: 0.2rem;
+  }
+
+  .time-colon {
+    padding: 0 0.1rem;
+  }
+
+  .start-button {
+    padding: 1rem 2.5rem;
+    letter-spacing: 2px;
+  }
+}
+
+/* ---------- Reset Dialog ---------- */
+.dialog-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.dialog-box {
+  background: rgba(0, 0, 0, 0.95);
+  border: 1px solid rgba(0, 255, 102, 0.3);
+  border-radius: 20px;
+  padding: 2.5rem 3rem;
+  max-width: 420px;
+  width: 90%;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  animation: scaleIn 0.3s ease-out;
+}
+
+.dialog-box::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(0, 255, 102, 0.5), transparent);
+}
+
+.dialog-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.dialog-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.4rem;
+  font-weight: 800;
+  letter-spacing: 3px;
+  color: #00ff66;
+  text-shadow: 0 0 15px rgba(0, 255, 102, 0.4);
+  margin-bottom: 0.8rem;
+}
+
+.dialog-message {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.55);
+  line-height: 1.6;
+  margin-bottom: 2rem;
+}
+
+.dialog-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.dialog-btn {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  padding: 0.8rem 2rem;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  border: none;
+}
+
+.dialog-btn-cancel {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.dialog-btn-cancel:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.8);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.dialog-btn-confirm {
+  background: rgba(255, 59, 92, 0.15);
+  border: 1px solid rgba(255, 59, 92, 0.4);
+  color: #ff3b5c;
+  text-shadow: 0 0 10px rgba(255, 59, 92, 0.3);
+}
+
+.dialog-btn-confirm:hover {
+  background: rgba(255, 59, 92, 0.25);
+  box-shadow: 0 0 20px rgba(255, 59, 92, 0.2);
+  border-color: rgba(255, 59, 92, 0.6);
+  transform: translateY(-2px);
+}
+
+.dialog-btn-confirm:active {
+  transform: translateY(0);
+}
+
+.dialog-success {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #00ff66;
+  text-shadow: 0 0 10px rgba(0, 255, 102, 0.4);
+  letter-spacing: 1px;
+}
+
+.dialog-error {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #ff3b5c;
+  text-shadow: 0 0 10px rgba(255, 59, 92, 0.4);
+  letter-spacing: 1px;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
