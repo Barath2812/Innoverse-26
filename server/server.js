@@ -23,6 +23,8 @@ const timerSchema = new mongoose.Schema({
 
 const Timer = mongoose.model("Timer", timerSchema);
 
+let countdownActive = false;
+
 
 // START TIMER (Admin Only)
 app.post("/start", async (req, res) => {
@@ -31,23 +33,38 @@ app.post("/start", async (req, res) => {
 
     const timer = await Timer.findOne();
 
-    if (timer && timer.isRunning) {
+    if ((timer && timer.isRunning) || countdownActive) {
         return res.json({ message: "Already Running" });
     }
 
-    await Timer.deleteMany({});
+    countdownActive = true;
+    res.json({ message: "Countdown Started" });
 
-    const newTimer = new Timer({
-        startTime: new Date(),
-        duration,
-        isRunning: true
-    });
+    // Broadcast 5-4-3-2-1 to all clients
+    let count = 5;
+    io.emit("preCountdown", count);
 
-    await newTimer.save();
+    const countdownInterval = setInterval(async () => {
+        count--;
+        if (count <= 0) {
+            clearInterval(countdownInterval);
+            io.emit("preCountdownEnd");
 
-    io.emit("timerStarted");
+            // Now start the actual timer
+            await Timer.deleteMany({});
+            const newTimer = new Timer({
+                startTime: new Date(),
+                duration,
+                isRunning: true
+            });
+            await newTimer.save();
+            countdownActive = false;
 
-    res.json({ message: "Timer Started" });
+            io.emit("timerStarted");
+        } else {
+            io.emit("preCountdown", count);
+        }
+    }, 1000);
 });
 
 

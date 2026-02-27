@@ -448,6 +448,53 @@
   }
 }
 
+/* ---------- Buzzer Visual (Last 30s) ---------- */
+.timer-card.buzzing {
+  border-color: rgba(255, 59, 92, 0.4);
+  animation: borderPulse 1s ease-in-out infinite;
+}
+
+.timer-card.buzzing .timer-label {
+  color: #ff3b5c;
+  text-shadow: 0 0 10px rgba(255, 59, 92, 0.4);
+}
+
+.digits-buzzing {
+  animation: digitFlash 1s ease-in-out infinite !important;
+}
+
+@keyframes borderPulse {
+
+  0%,
+  100% {
+    border-color: rgba(255, 59, 92, 0.3);
+    box-shadow: 0 0 20px rgba(255, 59, 92, 0.1);
+  }
+
+  50% {
+    border-color: rgba(255, 59, 92, 0.7);
+    box-shadow: 0 0 40px rgba(255, 59, 92, 0.2);
+  }
+}
+
+@keyframes digitFlash {
+
+  0%,
+  100% {
+    color: #00ff66;
+    text-shadow:
+      0 0 20px rgba(0, 255, 102, 0.6),
+      0 0 40px rgba(0, 255, 102, 0.3);
+  }
+
+  50% {
+    color: #ff3b5c;
+    text-shadow:
+      0 0 20px rgba(255, 59, 92, 0.6),
+      0 0 40px rgba(255, 59, 92, 0.3);
+  }
+}
+
 /* ---------- Responsive ---------- */
 @media (max-width: 640px) {
   .timer-card {

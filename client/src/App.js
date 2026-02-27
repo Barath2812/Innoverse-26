@@ -110,8 +110,53 @@ function TimerPage() {
   const [seconds, setSeconds] = useState("00");
   const [started, setStarted] = useState(false);
   const [timeUp, setTimeUp] = useState(false);
-  const [preCountdown, setPreCountdown] = useState(null); // 5,4,3,2,1 or null
+  const [preCountdown, setPreCountdown] = useState(null);
+  const [buzzing, setBuzzing] = useState(false);
   const intervalRef = useRef(null);
+  const audioCtxRef = useRef(null);
+
+  // Play a short beep using Web Audio API
+  const playBuzzer = useCallback(() => {
+    try {
+      if (!audioCtxRef.current) {
+        audioCtxRef.current = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      const ctx = audioCtxRef.current;
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.type = "square";
+      osc.frequency.value = 600;
+      gain.gain.value = 0.3;
+      osc.start();
+      osc.stop(ctx.currentTime + 0.15);
+    } catch (e) {
+      // Audio not supported
+    }
+  }, []);
+
+  // Play a tick sound for 5-4-3-2-1 countdown
+  const playTick = useCallback(() => {
+    try {
+      if (!audioCtxRef.current) {
+        audioCtxRef.current = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      const ctx = audioCtxRef.current;
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.type = "sine";
+      osc.frequency.value = 880;
+      gain.gain.value = 0.4;
+      gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
+      osc.start();
+      osc.stop(ctx.currentTime + 0.3);
+    } catch (e) {
+      // Audio not supported
+    }
+  }, []);
 
   const startCountdown = useCallback((startTime, duration) => {
     if (intervalRef.current) clearInterval(intervalRef.current);
@@ -122,11 +167,20 @@ function TimerPage() {
 
       if (remaining <= 0) {
         setTimeUp(true);
+        setBuzzing(false);
         setHours("00");
         setMinutes("00");
         setSeconds("00");
         clearInterval(intervalRef.current);
         return;
+      }
+
+      const totalSecs = Math.floor(remaining / 1000);
+      if (totalSecs <= 30) {
+        setBuzzing(true);
+        playBuzzer();
+      } else {
+        setBuzzing(false);
       }
 
       const hrs = Math.floor(remaining / 3600000);
@@ -140,7 +194,7 @@ function TimerPage() {
 
     tick();
     intervalRef.current = setInterval(tick, 1000);
-  }, []);
+  }, [playBuzzer]);
 
   const fetchTimer = useCallback(async () => {
     try {
@@ -167,38 +221,33 @@ function TimerPage() {
       if (intervalRef.current) clearInterval(intervalRef.current);
       setStarted(false);
       setTimeUp(false);
+      setPreCountdown(null);
       setHours("00");
       setMinutes("00");
       setSeconds("00");
     });
+    socket.on("preCountdown", (count) => {
+      setPreCountdown(count);
+      playTick();
+    });
+    socket.on("preCountdownEnd", () => {
+      setPreCountdown(null);
+    });
     return () => {
       socket.off("timerStarted", fetchTimer);
       socket.off("timerReset");
+      socket.off("preCountdown");
+      socket.off("preCountdownEnd");
       if (intervalRef.current) clearInterval(intervalRef.current);
     };
-  }, [fetchTimer]);
+  }, [fetchTimer, playTick]);
 
-  const startTimer = async () => {
+  const handleStartClick = async () => {
     try {
       await axios.post("http://localhost:5000/start");
     } catch (err) {
       console.error("Failed to start timer:", err);
     }
-  };
-
-  const handleStartClick = () => {
-    let count = 5;
-    setPreCountdown(count);
-    const id = setInterval(() => {
-      count--;
-      if (count <= 0) {
-        clearInterval(id);
-        setPreCountdown(null);
-        startTimer();
-      } else {
-        setPreCountdown(count);
-      }
-    }, 1000);
   };
 
   return (
@@ -266,21 +315,21 @@ function TimerPage() {
             <div className="time-up">TIME UP!</div>
           </div>
         ) : (
-          <div className="timer-card">
-            <div className="timer-label">Time Remaining</div>
+          <div className={`timer-card${buzzing ? " buzzing" : ""}`}>
+            <div className="timer-label">{buzzing ? "⚠ FINAL COUNTDOWN ⚠" : "Time Remaining"}</div>
             <div className="timer-display">
               <div className="time-segment">
-                <span className="time-digits">{hours}</span>
+                <span className={`time-digits${buzzing ? " digits-buzzing" : ""}`}>{hours}</span>
                 <span className="time-unit">Hours</span>
               </div>
               <span className="time-colon">:</span>
               <div className="time-segment">
-                <span className="time-digits">{minutes}</span>
+                <span className={`time-digits${buzzing ? " digits-buzzing" : ""}`}>{minutes}</span>
                 <span className="time-unit">Minutes</span>
               </div>
               <span className="time-colon">:</span>
               <div className="time-segment">
-                <span className="time-digits">{seconds}</span>
+                <span className={`time-digits${buzzing ? " digits-buzzing" : ""}`}>{seconds}</span>
                 <span className="time-unit">Seconds</span>
               </div>
             </div>
